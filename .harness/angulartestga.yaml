@@ -1,0 +1,35 @@
+pipeline:
+  name: angular-test-ga
+  identifier: angulartestga
+  projectIdentifier: DhrubaCI
+  orgIdentifier: default
+  tags: {}
+  stages:
+    - stage:
+        name: update events
+        identifier: update_events
+        description: ""
+        type: CI
+        spec:
+          cloneCodebase: true
+          platform:
+            os: Linux
+            arch: Amd64
+          runtime:
+            type: Cloud
+            spec: {}
+          execution:
+            steps:
+              - step:
+                  type: Run
+                  name: Install AIO dependencies
+                  identifier: Install_AIO_dependencies
+                  spec:
+                    shell: Sh
+                    command: yarn --cwd=aio install
+  properties:
+    ci:
+      codebase:
+        connectorRef: dhrubaaccountconnector
+        repoName: angular
+        build: <+input>
