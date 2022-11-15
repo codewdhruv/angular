@@ -27,6 +27,13 @@ pipeline:
                   spec:
                     shell: Sh
                     command: yarn --cwd=aio install
+              - step:
+                  type: Run
+                  name: Generate events
+                  identifier: Generate_events
+                  spec:
+                    shell: Sh
+                    command: node aio/scripts/generate-events/index.mjs --ignore-invalid-dates
   properties:
     ci:
       codebase:
