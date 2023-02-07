@@ -186,22 +186,6 @@ pipeline:
             steps:
               - step:
                   type: Run
-                  name: Save month to file
-                  identifier: Save_month_to_file
-                  spec:
-                    shell: Sh
-                    command: |
-                      date +%Y-%m > month.txt
-              - step:
-                  type: Run
-                  name: mdsum
-                  identifier: mdsum
-                  spec:
-                    shell: Sh
-                    command: |
-                      md5sum tools/esm-interop/patches/npm/* > patches.hash
-              - step:
-                  type: Run
                   name: Setup environment
                   identifier: Setup_environment
                   spec:
@@ -250,58 +234,6 @@ pipeline:
                   failureStrategies: []
               - step:
                   type: Run
-                  name: Rebasing PR on the target branch
-                  identifier: Rebasing_PR_on_the_target_branch
-                  spec:
-                    shell: Sh
-                    command: |-
-                      #!/bin/bash -eo pipefail
-
-                      node <<"NGEOF"
-                      #!/usr/bin/env node
-                      (()=>{var b=(e=>typeof require!="undefined"?require:typeof Proxy!="undefined"?new Proxy(e,{get:(r,o)=>(typeof require!="undefined"?require:r)[o]}):e)(function(e){if(typeof require!="undefined")return require.apply(this,arguments);throw new Error('Dynamic require of "'+e+'" is not supported')});var h=b("child_process");var a=/^(\d+)\.(\d+)\.x$/;function m(e,r){let o=e.split(/\r?\n/g).map(n=>n.split("/").slice(1).join("/").trim());if(o.length===0)throw new Error(`Could not find ref from branch list: ${e}`);return o.sort((n,s)=>{if(n===r)return-1;if(s===r)return 1;let c=a.test(n),i=a.test(s);if(c&&i){let[,d,C]=n.match(a),[,R,$]=s.match(a);return parseInt(R,10)-parseInt(d,10)||parseInt(C,10)-parseInt($,10)||0}return c?-1:i?1:0}),o[0]}function t(e){let r=`git ${e.join(" ")}`,o=(0,h.spawnSync)("git",e,{shell:!0,stdio:"pipe",encoding:"utf8"});if(o.error!==void 0)throw console.error(o.error),new Error(`Unexpected error while executing: ${r}`);if(o.status!==0)throw console.error(`Failed executing: ${r}.`),console.error(`Status Code: ${o.status}`),console.error(`Stdout: ${o.stdout}`),console.error(`Stderr: ${o.stdout}`),new Error(`Unexpected error while executing: ${r}`);return o.stdout.trim()}function E(e,r){return t(["branch","-r",`${r}/*`,"--sort=-committerdate","--contains",e])}function g(e,r){return t(["merge-base",e,r])}function I(e,r){let o=`${e}_${r}`;return t(["remote","add",o,`https://github.com/${e}/${r}.git`]),t(["fetch",o]),o}function S(e){return t(["rev-parse",e])}function l(e,r,o,n){let s=I(r,o),c=m(E(e,s),n),i=S(`${s}/${c}`);return{remote:s,ref:c,latestSha:i,sha:e}}var u=process.env.CIRCLE_GIT_BASE_REVISION,p=process.env.CIRCLE_GIT_HEAD_REVISION,f=process.env.MAIN_BRANCH_NAME;console.info("Provided variables to Orb script:");console.info({baseRevision:u,headRevision:p,primaryBranchName:f});var _=process.env.CIRCLE_PROJECT_USERNAME,v=process.env.CIRCLE_PROJECT_REPONAME,x=process.env.CIRCLE_PR_USERNAME,A=process.env.CIRCLE_PR_REPONAME,w=process.env.CIRCLE_PR_NUMBER;process.env.CIRCLE_PR_NUMBER||(console.info("Skipping rebase as the CircleCI run is not for a pull request."),process.exit(0));(async()=>{t(["config","user.email","angular-robot@google.com"]),t(["config","user.name","Angular Robot"]);let e=l(u,_,v,f),r=l(p,x,A,f),o=g(e.sha,r.sha);console.log("--------------------------------"),console.log(`    Target Branch:                   ${e.ref}`),console.log(`    Latest Commit for Target Branch: ${e.latestSha}`),console.log(`    Latest Commit for PR:            ${r.latestSha}`),console.log(`    First Common Ancestor SHA:       ${o}`),console.log("--------------------------------"),console.log();let n=t(["rev-list","--count",`origin/${e.ref}...${o}`]);if(console.log(`Checking ${n} commits for changes in the CircleCI config file.`),t(["diff","--name-only",`origin/${e.ref}`,o,"--",".circleci/config.yml"]))throw Error(`
-                              CircleCI config on ${e.ref} has been modified since commit
-                              ${o.slice(0,7)}, which this PR is based on.
-
-                              Please rebase the PR on ${e.ref} after fetching from upstream.
-
-                              Rebase instructions for PR Author, please run the following commands:
-
-                                git fetch upstream ${e.ref};
-                                git checkout ${r.ref};
-                                git rebase upstream/${e.ref};
-                                git push --force-with-lease;
-
-                              Angular team members can rebase this PR with the following command:
-                                yarn ng-dev pr rebase ${w}
-                              `);console.log("No change found in the CircleCI config file, continuing."),console.log(),t(["rebase",`origin/${e.ref}`]),console.log(`Rebased current branch onto ${e.ref}.`)})().catch(e=>{console.error("Failed to rebase on top of target branch."),console.error(e),process.exitCode=1});})();
-                      /**
-                       * @license
-                       * Copyright Google LLC All Rights Reserved.
-                       *
-                       * Use of this source code is governed by an MIT-style license that can be
-                       * found in the LICENSE file at https://angular.io/license
-                       */
-                      //# sourceMappingURL=bundle.js.map
-
-                      NGEOF
-                  when:
-                    stageStatus: All
-                  failureStrategies: []
-              - step:
-                  type: Run
-                  name: Running yarn install
-                  identifier: Running_yarn_install
-                  spec:
-                    shell: Sh
-                    command: |-
-                      #!/bin/bash -eo pipefail
-                      yarn install --frozen-lockfile --non-interactive --cache-folder ~/.cache/yarn
-                  when:
-                    stageStatus: All
-                  failureStrategies: []
-              - step:
-                  type: Run
                   name: Yarn cwd
                   identifier: Yarn_cwd
                   spec:
@@ -314,16 +246,12 @@ pipeline:
                   failureStrategies: []
               - step:
                   type: Run
-                  name: if condition
+                  name: aio payload and size aio local
                   identifier: if_condition
                   spec:
                     shell: Sh
-                    command: |-
-                      #!/bin/bash -eo pipefail
-                      if [ ! -d ~/bazel_repository_cache ]; then
-                        mkdir ~/bazel_repository_cache
-                        touch ~/bazel_repository_cache/MARKER
-                      fi
+                    command: |
+                      yarn --cwd aio payload-size aio-local
                   when:
                     stageStatus: All
                   failureStrategies: []
