@@ -250,8 +250,7 @@ pipeline:
                   identifier: if_condition
                   spec:
                     shell: Sh
-                    command: |
-                      yarn --cwd aio payload-size aio-local
+                    command: yarn --cwd aio test-local:ci
                   when:
                     stageStatus: All
                   failureStrategies: []
