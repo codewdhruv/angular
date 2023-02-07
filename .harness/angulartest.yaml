@@ -34,3 +34,11 @@ pipeline:
                     shell: Sh
                     command: |
                       date +%Y-%m > month.txt
+              - step:
+                  type: Run
+                  name: mdsum
+                  identifier: mdsum
+                  spec:
+                    shell: Sh
+                    command: |
+                      md5sum tools/esm-interop/patches/npm/* > patches.hash
