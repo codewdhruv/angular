@@ -41,7 +41,7 @@ pipeline:
                   spec:
                     shell: Sh
                     command: |
-                      md5sum tools/esm-interop/patches/npm/* > patches.hash
+                      md5sum tools/esm-interop/patches/npm/* 
               - step:
                   type: Run
                   name: Setup environment
