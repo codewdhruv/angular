@@ -255,3 +255,4 @@ pipeline:
                   when:
                     stageStatus: All
                   failureStrategies: []
+  allowStageExecutions: true
