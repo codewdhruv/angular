@@ -254,4 +254,6 @@ pipeline:
                   when:
                     stageStatus: All
                   failureStrategies: []
+        when:
+          pipelineStatus: All
   allowStageExecutions: true
