@@ -1,0 +1,36 @@
+pipeline:
+  name: angular-test
+  identifier: angulartest
+  projectIdentifier: NgLabs
+  orgIdentifier: default
+  tags: {}
+  properties:
+    ci:
+      codebase:
+        connectorRef: gitconnectordhruba
+        repoName: angular
+        build: <+input>
+  stages:
+    - stage:
+        name: default_workflow
+        identifier: default_workflow
+        description: ""
+        type: CI
+        spec:
+          cloneCodebase: true
+          platform:
+            os: Linux
+            arch: Amd64
+          runtime:
+            type: Cloud
+            spec: {}
+          execution:
+            steps:
+              - step:
+                  type: Run
+                  name: Save month to file
+                  identifier: Save_month_to_file
+                  spec:
+                    shell: Sh
+                    command: |
+                      date +%Y-%m > month.txt
