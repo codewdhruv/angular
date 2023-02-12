@@ -12,8 +12,8 @@ pipeline:
         build: <+input>
   stages:
     - stage:
-        name: default_workflow
-        identifier: default_workflow
+        name: setup
+        identifier: setup
         description: ""
         type: CI
         spec:
