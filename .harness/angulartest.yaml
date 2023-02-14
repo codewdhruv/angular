@@ -35,6 +35,7 @@ pipeline:
                     image: cimg/node:16.13.0
                     shell: Sh
                     command: |
+                      ls
                       date +%Y-%m >> month.txt
               - step:
                   type: Run
