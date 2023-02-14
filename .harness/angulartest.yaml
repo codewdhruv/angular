@@ -31,6 +31,8 @@ pipeline:
                   name: Save month to file
                   identifier: Save_month_to_file
                   spec:
+                    connectorRef: harnessnew
+                    image: cimg/node:16.13.0
                     shell: Sh
                     command: |
                       date +%Y-%m > month.txt
@@ -43,7 +45,7 @@ pipeline:
                     image: cimg/node:16.13.0
                     shell: Sh
                     command: |
-                      md5sum tools/esm-interop/patches/npm/
+                      md5sum tools/esm-interop/patches/npm/*
               - step:
                   type: Run
                   name: Setup environment
